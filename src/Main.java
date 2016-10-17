@@ -319,12 +319,6 @@ public class Main {
 		Input ii = new Input();
 		while ((inputString = input.nextLine())!="")
 		{
-//			polymerization = new Polymerization(inputString);
-//			System.out.println(polymerization.transString());
-//			polymerizaion .simplify("x", 3);
-//			polymerization.print();
-//			polymerization.derivative("x");
-//			polymerization.print();
 			ii.choose(ii.getChoice(inputString), inputString);
 		}
 		input.close();
