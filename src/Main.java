@@ -1,96 +1,92 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.PrimitiveIterator.OfDouble;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.crypto.spec.PSource;
 
-class Letter
-{
-	String letter;
-	int power;
-	public Letter()
-	{
+
+
+class Letter { /*¼Ó×¢ÊÍ*/
+	public String letter;
+	public int power;
+	Letter() { 
 		letter = "";
 		power = 0;
 	}
-	public Letter(String x)
-	{
+	Letter(String x) {
 		letter = x;
 		power = 1;
 	}
-	public Letter(String x,int num)
-	{
+	Letter(String x, int num){
 		letter = x;
 		power = num;
 	}
-	public void setNull()
-	{
+	public void setNull(){
 		letter = "";
 		power = 0;
 	}
 }
 
-class MulParts		// like 2*3 2 2*x*y
-{
+class MulParts{	// like 2*3 2 2*x*y
+
 	public List<Letter> parts;
 	public int con;		//the const of one MulParts
-	public MulParts(String input)
+	MulParts(String input)
 	{
 		con = 1;
 		parts = new ArrayList<Letter>();
 		String letterAndNumber[] = input.split("\\*");
-		for (String x : letterAndNumber)
-		{
-			if (isDigital(x))
-			{
+		for (String x : letterAndNumber){
+		
+			if (isDigital(x)){
+			
 				int tempCon = Integer.valueOf(x);
 				con *= tempCon;
 			}
-			else
-			{
+			else{
+			
 				int pos = haveLetter(x);
-				if (pos != -1)
-				{
-					parts.set(pos, new Letter(parts.get(pos).letter,parts.get(pos).power+1));
-				}
-				else
-				{
+				if (pos == -1){
+				
 					parts.add(new Letter(x));
+				}
+				else{
+				
+					parts.set(pos, new Letter(parts.get(pos).letter, parts.get(pos).power + 1));
 				}
 			}
 		}
 	}
-	private int haveLetter(String s) 
-	{
+	private int haveLetter(String s){
+	
 		for (int i = 0; i < parts.size(); i++) 
 		{
-			if (parts.get(i).letter.equals(s))
-			{
+			if (parts.get(i).letter.equals(s)){
+			
 				return i;
 			}
 		}
 		return -1;
 	}
-	public static boolean isDigital(String input)
-	{
+	public static boolean isDigital(String input){
+	
 		Pattern pattern = Pattern.compile("[0-9]+");
 		return pattern.matcher(input).matches();
 		
 	}
-	public void calcValue(Letter l,int value)
+	public void calcValue(Letter l, int value)
 	{
 		String letter = l.letter;
-		for (int i=0; i< parts.size(); i++)
+		for (int i = 0; i < parts.size(); i++)
 		{
 			Letter nowPos = parts.get(i);
 			if (nowPos.letter.equals(letter))
 			{
-				if (nowPos.power > 0 )
+				if (nowPos.power > 0)
 				{
-					con = con * value * nowPos.power;
+					con *= value * nowPos.power;
 				}
 				parts.remove(i);
 				i = i - 1;
@@ -103,7 +99,7 @@ class MulParts		// like 2*3 2 2*x*y
 		if (pos == -1)
 		{
 			con = 0;
-			return ;
+			return;
 		}
 		Letter now = parts.get(pos);
 		con = now.power * con;
@@ -113,7 +109,7 @@ class MulParts		// like 2*3 2 2*x*y
 		}
 		else
 		{
-			Letter newLetter = new Letter(now.letter,now.power-1);
+			Letter newLetter = new Letter(now.letter, now.power - 1);
 			parts.set(pos, newLetter);
 		}
 		
@@ -130,11 +126,11 @@ class MulParts		// like 2*3 2 2*x*y
 			output += con;
 		}
 		int l = parts.size();
-		for (int i=0 ; i < l; i++)
+		for (int i = 0; i < l; i++)
 		{
 			for (int j = 0; j < parts.get(i).power; j++)
 			{
-				output = output + "*" + parts.get(i).letter;
+				output += "*" + parts.get(i).letter;
 			}
 		}
 //		System.out.println(output);
@@ -145,7 +141,7 @@ class MulParts		// like 2*3 2 2*x*y
 class Polymerization
 {
 	List<MulParts> items;
-	public Polymerization(String inputString)
+	Polymerization(String inputString)
 	{
 		items = new ArrayList<MulParts>();
 		String[] stringParts;
@@ -160,13 +156,13 @@ class Polymerization
 //			mulParts.transToString();
 		}
 	}
-	public void simplify(String x,int value)
+	public void simplify(String x, int value)
 	{
 		for (int i = 0; i < items.size(); i++)
 		{
 			MulParts mulParts = items.get(i);
 			mulParts.calcValue(new Letter(x), value);
-			items.set(i,mulParts);
+			items.set(i, mulParts);
 		}
 	}
 	public void derivative(String x)
@@ -175,7 +171,7 @@ class Polymerization
 		{
 			MulParts mulParts = items.get(i);
 			mulParts.calcDerivative(x);
-			items.set(i,mulParts);
+			items.set(i, mulParts);
 		}
 	}
 	public void expression(String inputString)
@@ -203,7 +199,7 @@ class Polymerization
 			{
 				continue;
 			}
-			output = output + "+" + items.get(i).transToString();
+			output += "+" + items.get(i).transToString();
 		}
 		return output;
 	}
@@ -245,7 +241,7 @@ class Input
 		}
 		return choice;
 	}
-	public void choose(int choice,String inputString)
+	public void choose(int choice, String inputString)
 	{
 		if (choice == 0)
 		{
@@ -317,7 +313,7 @@ public class Main {
 		Polymerization polymerization;
 		Scanner input = new Scanner(System.in);
 		Input ii = new Input();
-		while ((inputString = input.nextLine())!="")
+		while (!((inputString = input.nextLine()).equals("")))
 		{
 //			polymerization = new Polymerization(inputString);
 //			System.out.println(polymerization.transString());
